@@ -2,6 +2,7 @@
 var button = document.getElementById('counter');
 
 button.onclick = function () {
+            
     // Create a request object
     var  request = new XMLHttpRequest();
     
@@ -17,6 +18,7 @@ button.onclick = function () {
         }
         // Not done yet
     };
+    
     // Make the request
     request.open('GET', 'http://patilvicky1212.imad.hasura-app.io/counter', true);
     request.send(null);
