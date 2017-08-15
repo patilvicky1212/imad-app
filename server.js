@@ -5,6 +5,7 @@ var path = require('path');
 var app = express();
 app.use(morgan('combined'));
 
+
 var articles = {
     'article-one': {
     title: 'Article One | Amey Patil',
@@ -38,7 +39,7 @@ var articles = {
         <p>
             This is the content for my third article. 
         </p>`
-},
+}
 };
 
 function createTemplate (data) {
