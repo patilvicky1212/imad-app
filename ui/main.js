@@ -55,12 +55,5 @@ submit.onclick = function () {
     var name = nameInput.value;
     request.open('GET', 'http://patilvicky1212.imad.hasura-app.io/submit-name?name=' + name, true);
     request.send(null);
-    
-        // Create a request object
-    
-    // Capture the responce and store it in a variable
-
-            // Take some action
-          
 
 };
