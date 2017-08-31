@@ -1,5 +1,4 @@
- 
-
+    
 // Submit username/password to login
 var submit = document.getElementById('submit_btn');
 submit.onclick = function () {
@@ -12,11 +11,9 @@ submit.onclick = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
             // Take some action
             if (request.status === 200) {
-                // Capture a list of names and render it as a list
-               console.log('user logged in');
                alert('Logged in successfully');
             } else if (request.status === 403) {
-                alert('username/password is incorret');
+                alert('Username/password is incorret');
             } else if (request.status === 500) {
                 alert('Something went wrong on the server');
             }
