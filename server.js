@@ -100,7 +100,8 @@ app.post('/login', function (req, res) {
            res.status(500).send(err.toString());
        } else {
            if (result.rows.length === 0) {
-                res.send(403).send(JSON.parse('{"username/password is invalid"}'));
+               // res.send(403).send(JSON.parse('{"username/password is invalid"}'));
+                res.send(JSON.parse('{"message":"Credential InCorrect"}'));
            } else {
                // Match the password
                var dbString = result.rows[0].password;
@@ -115,11 +116,11 @@ app.post('/login', function (req, res) {
                    // { auth: {userID }}
                    
                    // res.send('credentials correct!');
-                   res.setHeader('Content-Type', 'application/json');
                    res.send(JSON.parse('{"message":"Credential Correct"}'));
                    
                } else {
-                   res.send(403).send(JSON.parse('{"username/password is invalid"}'));
+                   //res.send(403).send(JSON.parse('{"username/password is invalid"}'));
+                   res.send(JSON.parse('{"message":"Credential InCorrect"}'));
                }
            }
        }           
