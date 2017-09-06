@@ -101,7 +101,7 @@ app.post('/login', function (req, res) {
        } else {
            if (result.rows.length === 0) {
                res.setHeader('Content-Type', 'application/json');
-               res.send(403).send('username/password is invalid');
+               res.send(403).send(err.toString());
                //res.send(403).send(JSON.parse('{"error":"username/password is invalid"}'));
            } else {
                // Match the password
@@ -122,7 +122,7 @@ app.post('/login', function (req, res) {
                    
                } else {
                    res.setHeader('Content-Type', 'application/json');
-                   res.send(403).send('username/password is invalid');
+                   res.send(403).send(err.toString());
                    //res.send(403).send(JSON.parse('{"error":"username/password is invalid"}'));
                }
            }
