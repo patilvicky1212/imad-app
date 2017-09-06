@@ -95,6 +95,7 @@ app.post('/create-user', function (req, res) {
 app.post('/login', function (req, res) {
     var username = req.body.username;
     var password = req.body.password;
+    
     pool.query('SELECT * FROM "user" WHERE username = $1', [username], function (err, result) {
        if (err) {
            res.status(500).send(err.toString());
@@ -118,10 +119,10 @@ app.post('/login', function (req, res) {
                    
                    // res.send('credentials correct!');
                    res.setHeader('Content-Type', 'application/json');
-                   res.send(JSON.parse('{"message":"Credential Correct"}'));
+                   res.send(JSON.parse('{"message":"Credential Correct!"}'));
                    
                } else {
-                   res.send(403).send('username/password is invalid');
+                   res.send(403).send('Username/password is invalid');
                }
            }
        }           
