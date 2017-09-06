@@ -101,9 +101,9 @@ app.post('/login', function (req, res) {
            res.status(500).send(err.toString());
        } else {
            if (result.rows.length === 0) {
-                // res.send(403).send('username/password is invalid');
+               res.send(403).send('username/password is invalid');
                // res.setHeader('Content-Type', 'application/json');
-                res.send(403).send(JSON.parse('{"message":"username/password is invalid"}'));
+                //res.send(403).send(JSON.parse('{"message":"username/password is invalid"}'));
            } else {
                // Match the password
                var dbString = result.rows[0].password;
@@ -117,13 +117,13 @@ app.post('/login', function (req, res) {
                    // internally, on the server side, it maps the session id to an object
                    // { auth: {userID }}
                    
-                   // res.send('credentials correct!');
-                   res.setHeader('Content-Type', 'application/json');
-                   res.send(JSON.parse('{"message":"Credential Correct!"}'));
+                   res.send('credentials correct!');
+                   // res.setHeader('Content-Type', 'application/json');
+                   // res.send(JSON.parse('{"message":"Credential Correct!"}'));
                    
                } else {
-                  // res.send(403).send('Username/password is invalid');
-                   res.send(403).send(JSON.parse('{"message":"username/password is invalid"}'));
+                   res.send(403).send('username/password is invalid');
+                   // res.send(403).send(JSON.parse('{"message":"username/password is invalid"}'));
                }
            }
        }           
