@@ -121,7 +121,7 @@ app.post('/login', function (req, res) {
                } else {
                    //res.send(403).send('username/password is invalid');
                    res.setHeader('Content-Type', 'application/json');
-                   res.send(JSON.parse('{"error":"username/password is invalid"}'));
+                   res.send(403).send(JSON.parse('{"error":"username/password is invalid"}'));
                }
            }
        }           
