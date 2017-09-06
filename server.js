@@ -87,7 +87,6 @@ app.post('/create-user', function (req, res) {
            res.status(500).send(err.toString());
        } else {
            res.send('User successfully created: ' + username);
-           //res.send(JSON.parse('{"message":"User successfully created: ' + username + ' "} ') );
        }           
     });
 });
@@ -102,8 +101,6 @@ app.post('/login', function (req, res) {
        } else {
            if (result.rows.length === 0) {
                res.send(403).send('username/password is invalid');
-               // res.setHeader('Content-Type', 'application/json');
-                //res.send(403).send(JSON.parse('{"message":"username/password is invalid"}'));
            } else {
                // Match the password
                var dbString = result.rows[0].password;
@@ -118,12 +115,9 @@ app.post('/login', function (req, res) {
                    // { auth: {userID }}
                    
                    res.send('credentials correct!');
-                   // res.setHeader('Content-Type', 'application/json');
-                   // res.send(JSON.parse('{"message":"Credential Correct!"}'));
                    
                } else {
                    res.send(403).send('username/password is invalid');
-                   // res.send(403).send(JSON.parse('{"message":"username/password is invalid"}'));
                }
            }
        }           
