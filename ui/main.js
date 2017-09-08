@@ -21,8 +21,10 @@ function loadLoginForm () {
           if (request.readyState === XMLHttpRequest.DONE) {
               // Take some action
               if (request.status === 200) {
+                  alert('Logged in successfully');
                   submit.value = 'Sucess!';
               } else if (request.status === 403) {
+                  alert('Username/password is incorret');
                   submit.value = 'Invalid credentials. Try again?';
               } else if (request.status === 500) {
                   alert('Something went wrong on the server');
