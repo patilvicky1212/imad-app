@@ -47,8 +47,8 @@ function loadLogin () {
     var request = new XMLHttpRequest();
     
     request.onreadystatechange = function () {
-        if(request.readyState === XMLHttpRequest.DONDE) {
-            if(request.status === 200) {
+        if (request.readyState === XMLHttpRequest.DONDE) {
+            if (request.status === 200) {
                 loadCommentForm(this.responseText);
             }
         }
@@ -69,14 +69,14 @@ function loadComments () {
     var request = new XMLHttpRequest();
     
     request.onreadystatechange = function () {
-        if(readyState === XMLHttpRequest,DONE) {
+        if (readyState === XMLHttpRequest,DONE) {
             var comments = document.getElementById('comments');
             
-            if(request.status === 200) {
+            if (request.status === 200) {
                 var content = '';
                 var commentsData = JSON.parse(this.responseText);
                 
-                for(var i = 0; i < commentsData.length; i++) {
+                for (var i = 0; i < commentsData.length; i++) {
                     var time = new Data(commentsData[i].timestamp);
                     
                     content += `
