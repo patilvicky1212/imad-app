@@ -103,7 +103,7 @@ function loadLogin () {
         }
     };
     
-    request.open('GET', '/check-login', true);
+    request.open('GET', 'http://patilvicky1212.imad.hasura-app.io/check-login', true);
     request.send(null);
 }
 
@@ -129,7 +129,7 @@ function loadArticles () {
         }
     };
     
-    request.open('GET', '/get-articles', true);
+    request.open('GET', 'http://patilvicky1212.imad.hasura-app.io/get-articles', true);
     request.send(null);
 }
 
