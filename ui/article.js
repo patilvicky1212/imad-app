@@ -1,14 +1,14 @@
-// Eg. patilvicky1212.imad.hasura-app.io/articles/article-one will result in article-one
+// Eg: patilvicky1212.imad.hasura-app.io/articles/article-one will result in article-one
 var currentArticleTitle = window.location.pathname.split('/')[2];
 
 function loadCommentForm () {
     var commentFormHtml = `
-    <h5>Submit a comment<h5>
-    <textarea id="comment_text" rows="5" cols="100" placeholder="Enter your comment here..."></textarea>
-    <br/>
-    <input type="submit" id"submit" value="Submit" />
-    </br>
-    `;
+        <h5>Submit a comment</h5>
+        <textarea id="comment_text" rows="5" cols="100" placeholder="Enter your comment here..."></textarea>
+        <br/>
+        <input type="submit" id="submit" value="Submit" />
+        <br/>
+        `;
     document.getElementById('comment_form').innerHTML = commentFormHtml;
     
     // Submit username/password to login
@@ -45,51 +45,47 @@ function loadCommentForm () {
 function loadLogin () {
     // Check if the user is already logged in
     var request = new XMLHttpRequest();
-    
     request.onreadystatechange = function () {
-        if (request.readyState === XMLHttpRequest.DONDE) {
+        if (request.readyState === XMLHttpRequest.DONE) {
             if (request.status === 200) {
                 loadCommentForm(this.responseText);
             }
         }
     };
+    
     request.open('GET', 'http://patilvicky1212.imad.hasura-app.io/check-login', true);
     request.send(null);
 }
 
-function escapeHTML (text) {
+function escapeHTML (text)
+{
     var $text = document.createTextNode(text);
     var $div = document.createElement('div');
     $div.appendChild($text);
-    return $div.innerHTML();
+    return $div.innerHTML;
 }
 
 function loadComments () {
-    // Check if the user is already logged in
+        // Check if the user is already logged in
     var request = new XMLHttpRequest();
-    
     request.onreadystatechange = function () {
-        if (readyState === XMLHttpRequest,DONE) {
+        if (request.readyState === XMLHttpRequest.DONE) {
             var comments = document.getElementById('comments');
-            
             if (request.status === 200) {
                 var content = '';
                 var commentsData = JSON.parse(this.responseText);
-                
-                for (var i = 0; i < commentsData.length; i++) {
-                    var time = new Data(commentsData[i].timestamp);
-                    
-                    content += `
-                    <div class="comments">
-                    <p>${escapeHTML(commentsData[i].comment)}</p>
-                    <div class="commenter">
-                    ${commentData[i].username} -${time.toLocaleTimeString()} on ${time.toLocaleDateString()}
-                    </div>
+                for (var i=0; i< commentsData.length; i++) {
+                    var time = new Date(commentsData[i].timestamp);
+                    content += `<div class="comment">
+                        <p>${escapeHTML(commentsData[i].comment)}</p>
+                        <div class="commenter">
+                            ${commentsData[i].username} - ${time.toLocaleTimeString()} on ${time.toLocaleDateString()} 
+                        </div>
                     </div>`;
                 }
                 comments.innerHTML = content;
             } else {
-                comments.innerHTML = ('Oops! Could not load comments!');
+                comments.innerHTML('Oops! Could not load comments!');
             }
         }
     };
@@ -97,6 +93,7 @@ function loadComments () {
     request.open('GET', 'http://patilvicky1212.imad.hasura-app.io/get-comments/' + currentArticleTitle, true);
     request.send(null);
 }
+
 
 // The first thing to do is to check if the user is logged in!
 loadLogin();
