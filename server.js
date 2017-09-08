@@ -114,6 +114,7 @@ app.post('/login', function (req, res) {
       } else {
           if (result.rows.length === 0) {
               //res.status(403).send('username/password is incorrect');
+              res.setHeader('Content-Type', 'application/json');
               res.status(403).send(JSON.parse('{"error":"username/password is incorrect"}'));
           } else {
               // Match the password
@@ -129,10 +130,12 @@ app.post('/login', function (req, res) {
                 // { auth: {userId }}
                 
                 //res.send('credentials correct!');
+                res.setHeader('Content-Type', 'application/json');
                 res.send(JSON.parse('{"message":"credentials correct!"}'));
                 
               } else {
                 //res.status(403).send('username/password is incorrect');
+                res.setHeader('Content-Type', 'application/json');
                 res.status(403).send(JSON.parse('{"error":"username/password is incorrect"}'));
               }
           }
