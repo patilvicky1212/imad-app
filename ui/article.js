@@ -1,4 +1,4 @@
-// Eg: patilvicky1212.imad.hasura-app.io/articles/article-one will result in article-one
+// Eg: coco98.imad.hasura-app.io/articles/article-one will result in article-one
 var currentArticleTitle = window.location.pathname.split('/')[2];
 
 function loadCommentForm () {
@@ -34,7 +34,7 @@ function loadCommentForm () {
         
         // Make the request
         var comment = document.getElementById('comment_text').value;
-        request.open('POST', 'http://patilvicky1212.imad.hasura-app.io/submit-comment/' + currentArticleTitle, true);
+        request.open('POST', '/submit-comment/' + currentArticleTitle, true);
         request.setRequestHeader('Content-Type', 'application/json');
         request.send(JSON.stringify({comment: comment}));  
         submit.value = 'Submitting...';
@@ -53,7 +53,7 @@ function loadLogin () {
         }
     };
     
-    request.open('GET', 'http://patilvicky1212.imad.hasura-app.io/check-login', true);
+    request.open('GET', '/check-login', true);
     request.send(null);
 }
 
@@ -90,7 +90,7 @@ function loadComments () {
         }
     };
     
-    request.open('GET', 'http://patilvicky1212.imad.hasura-app.io/get-comments/' + currentArticleTitle, true);
+    request.open('GET', '/get-comments/' + currentArticleTitle, true);
     request.send(null);
 }
 
