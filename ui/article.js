@@ -21,7 +21,7 @@ function loadCommentForm () {
         request.onreadystatechange = function () {
             if (request.readyState === XMLHttpRequest.DONE) {
                 // Take some action
-                if (request.Status === 200) {
+                if (request.status === 200) {
                     // clear the form & reload all the comments
                     document.getElementById('comment_text').value ='';
                     loadComments();
