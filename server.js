@@ -110,9 +110,7 @@ app.post('/login', function (req, res) {
             res.status(500).send(err.toString());
         } else {
             if (result.rows.length === 0) {
-                //res.status(403).send('Username/password is incorrect');
-                res.setHeader('Content-Type', 'application/json');
-                res.status(403).send(JSON.parse('{"error":"Username/password is incorrect"}'));
+                res.status(403).send('Username/password is incorrect');
             } else {
                 // Match the password
                 var dbString = result.rows[0].password;
@@ -126,13 +124,10 @@ app.post('/login', function (req, res) {
                     // internally, on the server side, it maps the session id to an object
                     // { auth: {userId }}
                 
-                    //res.send('credentials correct!');
-                    res.setHeader('Content-Type', 'application/json');
-                    res.status(403).send(JSON.parse('{"message":"Credentials correct"}'));
+                    res.send('credentials correct!');
+                    
                 } else {
-                    //res.status(403).send('username/password is incorrect');
-                    res.setHeader('Content-Type', 'application/json');
-                    res.status(403).send(JSON.parse('{"error":"Username/password is incorrect"}'));
+                    res.status(403).send('username/password is incorrect');
                 }
             }
         }
@@ -217,6 +212,7 @@ app.post('/submit-comment/:articleName', function (req, res) {
 });
 
 app.get('/articles/:articleName', function (req, res) {
+    // SELECT * FROM article WHERE title = '\'; DELETE WHERE a = \'asdf'
     pool.query("SELECT * FROM article WHERE title = $1", [req.params.articleName], function (err, result) {
         if (err) {
             res.status(500).send(err.toString());
