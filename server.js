@@ -15,7 +15,6 @@ var config = {
 };
 
 var app = express();
-
 app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(session({
@@ -33,9 +32,10 @@ function createTemplate (data) {
     <html>
         <head>
             <title>
+                {$title}
+            </title>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link href="/ui/style.css" rel="stylesheet" />
-            </title>
         </head>
         <body>
             <div class="container">
@@ -43,7 +43,9 @@ function createTemplate (data) {
                     <a href="/">Home</a>
                 </div>
                 <hr/>
-                <h3>{$heading}</h3>
+                <h3>
+                    {$heading}
+                </h3>
                 <div>
                     {$date.toDateString()}
                 </div>
@@ -53,6 +55,8 @@ function createTemplate (data) {
                 <hr/>
                 <h4>Comments</h4>
                 <div id="comment_form">
+                </div>
+                <div id="comments">
                     <center>Loading Comments...</center>
                 </div>
             </div>
