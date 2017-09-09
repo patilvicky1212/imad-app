@@ -15,6 +15,7 @@ var config = {
 };
 
 var app = express();
+
 app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(session({
@@ -30,172 +31,162 @@ function createTemplate (data) {
     
     var htmlTemplate = `
     <html>
-      <head>
-          <title>
-              ${title}
-          </title>
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link href="/ui/style.css" rel="stylesheet" />
-      </head> 
-      <body>
-          <div class="container">
-              <div>
-                  <a href="/">Home</a>
-              </div>
-              <hr/>
-              <h3>
-                  ${heading}
-              </h3>
-              <div>
-                  ${date.toDateString()}
-              </div>
-              <div>
-                ${content}
-              </div>
-              <hr/>
-              <h4>Comments</h4>
-              <div id="comment_form">
-              </div>
-              <div id="comments">
-                <center>Loading comments...</center>
-              </div>
-          </div>
-          <script type="text/javascript" src="/ui/article.js"></script>
-      </body>
+        <head>
+            <title>
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <link href="/ui/style.css" rel="stylesheet" />
+            </title>
+        </head>
+        <body>
+            <div class="container">
+                <div>
+                    <a href="/">Home</a>
+                </div>
+                <hr/>
+                <h3>{$heading}</h3>
+                <div>
+                    {$date.toDateString()}
+                </div>
+                <div>
+                    {$content}
+                </div>
+                <hr/>
+                <h4>Comments</h4>
+                <div id="comment_form">
+                    <center>Loading Comments...</center>
+                </div>
+            </div>
+        </body>
     </html>
     `;
     return htmlTemplate;
 }
 
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'ui', 'index.html'));
+    res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
 
-
 function hash (input, salt) {
-    // How do we create a hash?
-    var hashed = crypto.pbkdf2Sync(input, salt, 10000, 512, 'sha512');
-    return ["pbkdf2", "10000", salt, hashed.toString('hex')].join('$');
+    // How do we create hash?
+    var hashed = crypto.pdkdf2Sync(input, salt, 10000, 512, 'sha512');
+    return ["pdkdf2", "10000", salt, hashed.toString('hex')].join('$');
 }
 
-
-app.get('/hash/:input', function(req, res) {
-   var hashedString = hash(req.params.input, 'this-is-some-random-string');
-   res.send(hashedString);
+app.get('/hash/:input', function (req, res) {
+    var hashedString = hash(req.params.input, 'this-is-some-random-string');
+    re.send(hashedString);
 });
 
 app.post('/create-user', function (req, res) {
-   // username, password
-   // {"username": "amey", "password": "password"}
-   // JSON
-   var username = req.body.username;
-   var password = req.body.password;
-   var salt = crypto.randomBytes(128).toString('hex');
-   var dbString = hash(password, salt);
-   
-   pool.query('INSERT INTO "user" (username, password) VALUES ($1, $2)', [username, dbString], function (err, result) {
-      if (err) {
-          res.status(500).send(err.toString());
-      } else {
-          //res.send('User successfully created: ' + username);
-          //res.setHeader('Content-Type', 'application/json');
-          res.send(JSON.parse('{"message":"User successfully created: ' + username + ' "} ') );
-      }
-   });
+    // username, password
+    // {"username": "amey", "password": "password"}
+    // JSON
+    var username = req.body.username;
+    var password = req.body.password;
+    var salt = crypto.randomBytes(128).toString('hex');
+    var dbString = hash(password, salt);
+    
+    pool.query('INSERT INTO "user" (username, password) VALUE ($1, $2)', [username, dbString], function (err, result) {
+        if (err) {
+            res.status(500).send(err.toString());
+        } else {
+            //res.send('User successfully created');
+            res.send(JSON.parse('{"message":"User successfully created: ' + username + ' "}'));
+        }
+    });
 });
 
 app.post('/login', function (req, res) {
-   var username = req.body.username;
-   var password = req.body.password;
-   
-   pool.query('SELECT * FROM "user" WHERE username = $1', [username], function (err, result) {
-      if (err) {
-          res.status(500).send(err.toString());
-      } else {
-          if (result.rows.length === 0) {
-              //res.status(403).send('username/password is incorrect');
-              res.setHeader('Content-Type', 'application/json');
-              res.status(403).send(JSON.parse('{"error":"username/password is incorrect"}'));
-          } else {
-              // Match the password
-              var dbString = result.rows[0].password;
-              var salt = dbString.split('$')[2];
-              var hashedPassword = hash(password, salt); // Creating a hash based on the password submitted and the original salt
-              if (hashedPassword === dbString) {
-                
-                // Set the session
-                req.session.auth = {userId: result.rows[0].id};
-                // set cookie with a session id
-                // internally, on the server side, it maps the session id to an object
-                // { auth: {userId }}
-                
-                //res.send('credentials correct!');
+    var username = req.body.username;
+    var password = req.body.password;
+    
+    pool.query('SELECT * FROM "user" WHERE username = $1', [username], function(err, result) {
+        if (err) {
+            res.status(500).send(err.toString());
+        } else {
+            if (result.rows.length === 0) {
+                //res.status(403).send('Username/password is incorrect');
                 res.setHeader('Content-Type', 'application/json');
-                res.send(JSON.parse('{"message":"credentials correct!"}'));
+                res.status(403).send(JSON.parse('{"error":"Username/password is incorrect"}'));
+            } else {
+                // Match the password
+                var dbString = result.rows[0].password;
+                var salt = dbString.split('$')[2];
+                var hashedPassword = hash(password, salt); // Creating a hash based on the password submitted and the original salt
                 
-              } else {
-                //res.status(403).send('username/password is incorrect');
-                res.setHeader('Content-Type', 'application/json');
-                res.status(403).send(JSON.parse('{"error":"username/password is incorrect"}'));
-              }
-          }
-      }
-   });
+                if (hashedPassword === dbString) {
+                    // Set the session
+                    req.session.auth = {userId: result.rows[0].id};
+                    // set cookie with a session id
+                    // internally, on the server side, it maps the session id to an object
+                    // { auth: {userId }}
+                
+                    //res.send('credentials correct!');
+                    res.setHeader('Content-Type', 'application/json');
+                    res.status(403).send(JSON.parse('{"message":"Credentials correct"}'));
+                } else {
+                    //res.status(403).send('username/password is incorrect');
+                    res.setHeader('Content-Type', 'application/json');
+                    res.status(403).send(JSON.parse('{"error":"Username/password is incorrect"}'));
+                }
+            }
+        }
+    });
 });
 
 app.get('/check-login', function (req, res) {
-   if (req.session && req.session.auth && req.session.auth.userId) {
-       // Load the user object
-       pool.query('SELECT * FROM "user" WHERE id = $1', [req.session.auth.userId], function (err, result) {
-           if (err) {
-              res.status(500).send(err.toString());
-           } else {
-              res.send(result.rows[0].username);    
-           }
-       });
-   } else {
-       res.status(400).send('You are not logged in');
-   }
+    if (req.session && req.session.auth && req.session.auth.userId) {
+        // Load the user object
+        pool.query('SELECT * FROM "user" WHERE id = $1', [req.session.auth.userId], function (err, result) {
+            if (err) {
+                res.status(500).send(err.toString());
+            } else {
+                res.send(result.rows[0].username);
+            }
+        });
+    } else {
+        res.status(400).send('You are not logged in');
+    }
 });
 
-app.get('/logout', function (req, res) {
-   delete req.session.auth;
-   res.send('<html><body>Logged out!<br/><br/><a href="/">Back to home</a></body></html>');
+app.get('/logout', function (req,res) {
+    delete req.session.auth;
+    res.send('<html><body>Logged out!<br/><br/><a href="/">Back to home</a></body></html>');
 });
 
 var pool = new Pool(config);
 
 app.get('/get-articles', function (req, res) {
-   // make a select request
-   // return a response with the results
-   pool.query('SELECT * FROM article ORDER BY date DESC', function (err, result) {
-      if (err) {
-          res.status(500).send(err.toString());
-      } else {
-          res.send(JSON.stringify(result.rows));
-      }
-   });
+    // Make a select request
+    // Return a response with the results
+    pool.query('SELECT * FROM article ORDER BY date DESC', function (err, result) {
+        if (err) {
+            res.status(500).send(err.toString());
+        } else {
+            res.send(JSON.stringify(result.rows));
+        }
+    });
 });
 
 app.get('/get-comments/:articleName', function (req, res) {
    // make a select request
    // return a response with the results
-   pool.query('SELECT comment.*, "user".username FROM article, comment, "user" WHERE article.title = $1 AND article.id = comment.article_id AND comment.user_id = "user".id ORDER BY comment.timestamp DESC', [req.params.articleName], function (err, result) {
-      if (err) {
-          res.status(500).send(err.toString());
-      } else {
-          res.send(JSON.stringify(result.rows));
-      }
+   pool.quey('SELECT comment.*, "user".username FROM article, comment, "user" WHERE article.title = $1 AND article.id = comment.article_id AND comment.user_id = "user".id ORDER BY comment.timestamp DESC', [req.params.articleName], function (err, result) {
+       if (err) {
+           res.status(500).send(err.toString());
+       } else {
+           res.send(JSON.stringify(result.rows));
+       }
    });
 });
 
 app.post('/submit-comment/:articleName', function (req, res) {
-   // Check if the user is logged in
+    // Check if the user is logged in
     if (req.session && req.session.auth && req.session.auth.userId) {
         // First check if the article exists and get the article-id
-        pool.query('SELECT * from article where title = $1', [req.params.articleName], function (err, result) {
+        pool.query('SELECT * FROM article WHERE title = $1', [req.params.articleName], function (err, result) {
             if (err) {
-                res.status(500).send(err.toString());
+                res.status(500).send('Article not found');
             } else {
                 if (result.rows.length === 0) {
                     res.status(400).send('Article not found');
@@ -214,7 +205,7 @@ app.post('/submit-comment/:articleName', function (req, res) {
                         });
                 }
             }
-       });     
+        });
     } else {
         res.status(403).send('Only logged in users can comment');
     }
@@ -234,6 +225,21 @@ app.get('/articles/:articleName', function (req, res) {
         }
     }
   });
+});
+
+app.get('/articles/:articleName', function (req, res) {
+    pool.query("SELECT * FROM srticle WHERE title = $1", [req.params.articleName], function (err, result) {
+        if (err) {
+            res.status(500).send(err.toString());
+        } else {
+            if (result.rows.length === 0) {
+                res.status(404).send('Article not found');
+            } else {
+                var articleData = result.rows[0];
+                res.send(createTemplate(articleData));
+            }
+        }
+    });
 });
 
 app.get('/ui/:fileName', function (req, res) {
